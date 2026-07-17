@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { optimizedVideoUrl } from '../utils/videoUrl';
 
 interface LazyVideoProps {
   src: string;
@@ -36,7 +37,7 @@ export default function LazyVideo({ src, className }: LazyVideoProps) {
   return (
     <video
       ref={ref}
-      src={shouldLoad ? src : undefined}
+      src={shouldLoad ? optimizedVideoUrl(src) : undefined}
       className={className}
       autoPlay
       muted

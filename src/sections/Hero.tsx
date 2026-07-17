@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import ScrambleIn from '../components/ScrambleIn';
+import { optimizedVideoUrl } from '../utils/videoUrl';
 
 const HERO_VIDEO =
   'https://res.cloudinary.com/wnb3twu1/video/upload/v1784196255/axolotl_wyn5xn.mp4';
@@ -101,7 +102,7 @@ export default function Hero({ entranceComplete }: HeroProps) {
       {/* Video #1 — scrubbed by mouse movement / touch drag, not autoplay */}
       <video
         ref={videoRef}
-        src={HERO_VIDEO}
+        src={optimizedVideoUrl(HERO_VIDEO)}
         className="absolute inset-0 w-full h-full object-cover"
         muted
         playsInline
