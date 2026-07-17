@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ArrowUpRight } from 'lucide-react';
 import ScrambleText from '../components/ScrambleText';
+import LazyVideo from '../components/LazyVideo';
 
-const VIDEO_URL =
+const SECTION_VIDEO =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_095810_ecea3dd2-fc5e-4e41-8696-4219290b6589.mp4';
 
 interface CaseStudy {
@@ -12,11 +13,11 @@ interface CaseStudy {
   client: string;
   category: string;
   result: string;
-  // Video source added later — placeholder until real commercial links are provided.
+  // Video source added later — placeholder until real links are provided.
   videoSrc?: string;
 }
 
-const CASE_STUDIES: CaseStudy[] = [
+const COMMERCIAL_STUDIES: CaseStudy[] = [
   {
     index: '01',
     title: 'Desert Bloom',
@@ -47,6 +48,61 @@ const CASE_STUDIES: CaseStudy[] = [
   },
 ];
 
+const WEBSITE_STUDIES: CaseStudy[] = [
+  {
+    index: '01',
+    title: 'Table Eleven',
+    client: 'Family-Owned Restaurant',
+    category: 'Website — Design & Build',
+    result: 'Online reservations up 3x in first month',
+  },
+  {
+    index: '02',
+    title: 'Evergreen Yards',
+    client: 'Landscaping Business',
+    category: 'Website — Lead Generation',
+    result: '40+ qualified quote requests per month',
+  },
+  {
+    index: '03',
+    title: 'North Peak Legal',
+    client: 'Boutique Law Firm',
+    category: 'Website — Rebrand & Rebuild',
+    result: 'Bounce rate cut from 71% to 38%',
+  },
+  {
+    index: '04',
+    title: 'Coast & Co.',
+    client: 'DTC Retail Brand',
+    category: 'Website — E-Commerce',
+    result: '+92% conversion rate after relaunch',
+  },
+];
+
+const TOOL_STUDIES: CaseStudy[] = [
+  {
+    index: '01',
+    title: 'Concierge Bot',
+    client: 'Website Chatbots',
+    category: 'AI Tool — Customer Support',
+    result: '80% of inquiries answered without staff',
+  },
+  {
+    index: '02',
+    title: 'House Model',
+    client: 'Local LLMs',
+    category: 'AI Tool — Private On-Prem AI',
+    result: 'Company data never leaves the building',
+  },
+  {
+    index: '03',
+    title: 'After Hours',
+    client: 'Voicemail Assistant',
+    category: 'AI Tool — Call Handling',
+    result: 'Every missed call answered and booked',
+  },
+];
+
 function CaseStudyCard({ study, delay }: { study: CaseStudy; delay: number }) {
   const [hovered, setHovered] = useState(false);
 
@@ -60,16 +116,12 @@ function CaseStudyCard({ study, delay }: { study: CaseStudy; delay: number }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Video slot — real commercial links to be added later */}
+      {/* Video slot — real links to be added later */}
       <div className="relative aspect-video bg-white/5 flex items-center justify-center overflow-hidden">
         {study.videoSrc ? (
-          <video
+          <LazyVideo
             src={study.videoSrc}
             className="absolute inset-0 w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
           />
         ) : (
           <>
@@ -88,7 +140,7 @@ function CaseStudyCard({ study, delay }: { study: CaseStudy; delay: number }) {
               <Play size={18} className="text-white ml-0.5" />
             </motion.div>
             <span className="absolute bottom-3 right-4 text-[10px] tracking-[0.2em] uppercase text-white/40">
-              Film coming soon
+              Coming soon
             </span>
           </>
         )}
@@ -105,27 +157,39 @@ function CaseStudyCard({ study, delay }: { study: CaseStudy; delay: number }) {
             className="shrink-0 mt-1 text-white/40 group-hover:text-white transition-colors"
           />
         </div>
-        <p className="text-xs text-white/50 uppercase tracking-widest">{study.category}</p>
-        <p className="text-sm text-white/70">{study.client}</p>
+        <p className="text-xs uppercase tracking-widest text-neon">{study.category}</p>
+        <p className="text-sm text-white/80">{study.client}</p>
         <p className="text-sm text-white mt-2 border-t border-white/10 pt-3">{study.result}</p>
       </div>
     </motion.article>
   );
 }
 
-export default function CaseStudies() {
+interface CaseStudySectionProps {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  studies: CaseStudy[];
+  columns?: 2 | 3;
+  showViewMore?: boolean;
+}
+
+function CaseStudySection({
+  id,
+  eyebrow,
+  heading,
+  studies,
+  columns = 2,
+  showViewMore = false,
+}: CaseStudySectionProps) {
   const [viewMoreHovered, setViewMoreHovered] = useState(false);
 
   return (
-    <section id="case-studies" className="relative min-h-screen overflow-hidden">
-      {/* Video #3 */}
-      <video
-        src={VIDEO_URL}
+    <section id={id} className="relative min-h-screen overflow-hidden">
+      {/* Video #3 (shared across the case study sections for now) */}
+      <LazyVideo
+        src={SECTION_VIDEO}
         className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
       />
       <div className="absolute inset-0 bg-black/70" />
 
@@ -137,33 +201,72 @@ export default function CaseStudies() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1.0] }}
         >
-          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-white/60 mb-4">
-            Case Studies
+          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase mb-4 text-neon">
+            {eyebrow}
           </p>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight max-w-3xl">
-            Commercials that already ran. Results that already landed.
-          </h2>
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight max-w-3xl">{heading}</h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8">
-          {CASE_STUDIES.map((study, i) => (
-            <CaseStudyCard key={study.index} study={study} delay={i * 0.12} />
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8 ${
+            columns === 3 ? 'lg:grid-cols-3' : ''
+          }`}
+        >
+          {studies.map((study, i) => (
+            <CaseStudyCard key={study.index + study.title} study={study} delay={i * 0.12} />
           ))}
         </div>
 
-        <div className="flex justify-center mt-14 sm:mt-20">
-          <motion.button
-            className="flex items-center gap-2 h-12 px-8 border border-white/40 rounded-full text-sm"
-            whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.1)' }}
-            whileTap={{ scale: 0.97 }}
-            onMouseEnter={() => setViewMoreHovered(true)}
-            onMouseLeave={() => setViewMoreHovered(false)}
-          >
-            <ScrambleText text="View More" isHovered={viewMoreHovered} />
-            <ArrowUpRight size={16} />
-          </motion.button>
-        </div>
+        {showViewMore && (
+          <div className="flex justify-center mt-14 sm:mt-20">
+            <motion.button
+              className="flex items-center gap-2 h-12 px-8 border border-white/40 rounded-full text-sm"
+              whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.1)' }}
+              whileTap={{ scale: 0.97 }}
+              onMouseEnter={() => setViewMoreHovered(true)}
+              onMouseLeave={() => setViewMoreHovered(false)}
+            >
+              <ScrambleText text="View More" isHovered={viewMoreHovered} />
+              <ArrowUpRight size={16} />
+            </motion.button>
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+export function CommercialCaseStudies() {
+  return (
+    <CaseStudySection
+      id="case-studies"
+      eyebrow="Case Studies — Commercials"
+      heading="Commercials that already ran. Results that already landed."
+      studies={COMMERCIAL_STUDIES}
+      showViewMore
+    />
+  );
+}
+
+export function WebsiteCaseStudies() {
+  return (
+    <CaseStudySection
+      id="case-studies-websites"
+      eyebrow="Case Studies — Websites"
+      heading="Websites built to work as hard as you do."
+      studies={WEBSITE_STUDIES}
+    />
+  );
+}
+
+export function ToolCaseStudies() {
+  return (
+    <CaseStudySection
+      id="case-studies-tools"
+      eyebrow="Case Studies — AI Tools"
+      heading="Chatbots, local LLMs, and voice assistants in the wild."
+      studies={TOOL_STUDIES}
+      columns={3}
+    />
   );
 }

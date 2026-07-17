@@ -6,69 +6,99 @@ const HERO_VIDEO =
   'https://res.cloudinary.com/wnb3twu1/video/upload/v1784196255/axolotl_wyn5xn.mp4';
 
 const SCRUB_SENSITIVITY = 0.8;
+const SMOOTHING = 0.12;
 
 interface HeroProps {
   entranceComplete: boolean;
 }
 
 export default function Hero({ entranceComplete }: HeroProps) {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const targetTime = useRef(0);
-  const isSeeking = useRef(false);
-  const lastX = useRef<number | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    const section = sectionRef.current;
+    if (!video || !section) return;
 
     video.pause();
-    video.currentTime = 0;
 
-    const requestSeek = () => {
-      isSeeking.current = true;
-      video.currentTime = targetTime.current;
-    };
+    let target = 0;
+    let smoothed = 0;
+    let seeking = false;
+    let lastMouseX: number | null = null;
+    let lastTouchX: number | null = null;
+    let raf = 0;
 
-    // Chain seeks through the seeked event so frames are never dropped:
-    // while a seek is in flight we only update targetTime, then issue the
-    // next seek as soon as the current one lands.
-    const onSeeked = () => {
-      if (Math.abs(video.currentTime - targetTime.current) > 0.001) {
-        requestSeek();
-      } else {
-        isSeeking.current = false;
-      }
+    const applyDelta = (dx: number) => {
+      const duration = video.duration;
+      if (!duration || isNaN(duration)) return;
+      const delta = (dx / window.innerWidth) * duration * SCRUB_SENSITIVITY;
+      target = Math.min(Math.max(target + delta, 0), duration - 0.05);
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!video.duration || isNaN(video.duration)) return;
-      if (lastX.current === null) {
-        lastX.current = e.clientX;
-        return;
-      }
-      const dx = e.clientX - lastX.current;
-      lastX.current = e.clientX;
-
-      const delta = (dx / window.innerWidth) * video.duration * SCRUB_SENSITIVITY;
-      targetTime.current = Math.min(
-        Math.max(targetTime.current + delta, 0),
-        video.duration - 0.05
-      );
-
-      if (!isSeeking.current) requestSeek();
+      if (lastMouseX !== null) applyDelta(e.clientX - lastMouseX);
+      lastMouseX = e.clientX;
     };
+
+    const onTouchStart = (e: TouchEvent) => {
+      lastTouchX = e.touches[0].clientX;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const x = e.touches[0].clientX;
+      if (lastTouchX !== null) applyDelta(x - lastTouchX);
+      lastTouchX = x;
+    };
+    const onTouchEnd = () => {
+      lastTouchX = null;
+    };
+
+    const onSeeked = () => {
+      seeking = false;
+    };
+
+    // Smoothing loop: ease the playhead toward the drag target every frame,
+    // and only issue a new seek once the previous one has landed (seeked
+    // event) so frames are never dropped.
+    const tick = () => {
+      smoothed += (target - smoothed) * SMOOTHING;
+      if (
+        !seeking &&
+        video.readyState >= 2 &&
+        Math.abs(video.currentTime - smoothed) > 0.005
+      ) {
+        seeking = true;
+        video.currentTime = smoothed;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
 
     video.addEventListener('seeked', onSeeked);
     window.addEventListener('mousemove', onMouseMove);
+    section.addEventListener('touchstart', onTouchStart, { passive: true });
+    section.addEventListener('touchmove', onTouchMove, { passive: true });
+    section.addEventListener('touchend', onTouchEnd);
+
     return () => {
+      cancelAnimationFrame(raf);
       video.removeEventListener('seeked', onSeeked);
       window.removeEventListener('mousemove', onMouseMove);
+      section.removeEventListener('touchstart', onTouchStart);
+      section.removeEventListener('touchmove', onTouchMove);
+      section.removeEventListener('touchend', onTouchEnd);
     };
   }, []);
 
   return (
-    <section id="top" className="relative h-screen h-[100dvh] overflow-hidden">
-      {/* Video #1 — mouse-scrubbed, not autoplay */}
+    <section
+      ref={sectionRef}
+      id="top"
+      className="relative h-screen h-[100dvh] overflow-hidden"
+      style={{ touchAction: 'pan-y' }}
+    >
+      {/* Video #1 — scrubbed by mouse movement / touch drag, not autoplay */}
       <video
         ref={videoRef}
         src={HERO_VIDEO}
@@ -113,7 +143,7 @@ export default function Hero({ entranceComplete }: HeroProps) {
 
       {/* Content */}
       <motion.div
-        className="relative z-10 flex flex-col h-full px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8 sm:pb-12"
+        className="relative z-10 flex flex-col h-full px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8 sm:pb-12 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: entranceComplete ? 1 : 0 }}
         transition={{ duration: 1 }}
@@ -126,7 +156,7 @@ export default function Hero({ entranceComplete }: HeroProps) {
               Latitude36
             </h1>
             <motion.p
-              className="text-sm sm:text-base text-white/80 leading-relaxed"
+              className="text-sm sm:text-base leading-relaxed text-neon"
               initial={{ y: 25, opacity: 0 }}
               animate={entranceComplete ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1.0], delay: 0.2 }}

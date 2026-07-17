@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
 import Cinematic from './sections/Cinematic';
-import CaseStudies from './sections/CaseStudies';
+import {
+  CommercialCaseStudies,
+  WebsiteCaseStudies,
+  ToolCaseStudies,
+} from './sections/CaseStudies';
 import Technology from './sections/Technology';
 import Architecture from './sections/Architecture';
+import Contact from './sections/Contact';
 import Footer from './sections/Footer';
 
 export default function App() {
@@ -20,9 +25,12 @@ export default function App() {
       <Navbar entranceComplete={entranceComplete} />
       <Hero entranceComplete={entranceComplete} />
       <Cinematic />
-      <CaseStudies />
+      <CommercialCaseStudies />
+      <WebsiteCaseStudies />
+      <ToolCaseStudies />
       <Technology />
       <Architecture />
+      <Contact />
       <Footer />
     </div>
   );

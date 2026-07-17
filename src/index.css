@@ -33,6 +33,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Neon accent text — readable over bright video backgrounds */
+.text-neon {
+  color: #e0aaff;
+  text-shadow:
+    0 0 10px rgba(224, 170, 255, 0.45),
+    0 0 26px rgba(199, 125, 255, 0.3);
+}
+
 /* Lenis smooth scroll utility classes */
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;

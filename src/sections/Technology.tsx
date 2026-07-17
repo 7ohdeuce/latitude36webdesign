@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Brain, Clapperboard, Wand2, Gauge } from 'lucide-react';
+import LazyVideo from '../components/LazyVideo';
 
 const VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_095750_32a52ce0-2005-45c9-9093-41f03fde9530.mp4';
@@ -31,13 +32,9 @@ export default function Technology() {
   return (
     <section className="relative h-screen h-[100dvh] overflow-hidden">
       {/* Video #4 */}
-      <video
+      <LazyVideo
         src={VIDEO_URL}
         className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
       />
       <div className="absolute inset-0 bg-black/65" />
 
@@ -48,7 +45,7 @@ export default function Technology() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1.0] }}
         >
-          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-white/60 mb-4">
+          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase mb-4 text-neon">
             Adaptive Intelligence
           </p>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight max-w-3xl mb-12 sm:mb-16">
@@ -68,7 +65,7 @@ export default function Technology() {
             >
               <feature.icon size={22} className="text-white/80 mb-4" />
               <h3 className="text-base font-bold mb-2">{feature.title}</h3>
-              <p className="text-sm text-white/65 leading-relaxed">{feature.body}</p>
+              <p className="text-sm text-white/85 leading-relaxed">{feature.body}</p>
             </motion.div>
           ))}
         </div>

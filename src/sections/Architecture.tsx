@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import ScrambleText from '../components/ScrambleText';
+import { scrollToId } from '../utils/scrollTo';
 
 interface Tier {
   index: string;
@@ -95,7 +96,7 @@ function TierCard({ tier, delay }: { tier: Tier; delay: number }) {
         }`}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })}
+        onClick={() => scrollToId('contact')}
       >
         Start a Project
       </motion.button>
@@ -114,7 +115,7 @@ export default function Architecture() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1.0] }}
         >
-          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-white/60 mb-4">
+          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase mb-4 text-neon">
             Pricing
           </p>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight max-w-3xl">

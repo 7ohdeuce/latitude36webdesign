@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Latitude36Logo from './Latitude36Logo';
 import SquashHamburger from './SquashHamburger';
 import ScrambleText from './ScrambleText';
+import { scrollToId } from '../utils/scrollTo';
 
 interface NavbarProps {
   entranceComplete: boolean;
@@ -13,14 +14,6 @@ const NAV_LINKS: { label: string; target: string }[] = [
   { label: 'Pricing', target: 'architecture' },
   { label: 'About Me', target: 'footer' },
 ];
-
-function scrollToId(id: string) {
-  if (id === 'top') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
-  }
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-}
 
 function NavLink({ label, target, onNavigate }: { label: string; target: string; onNavigate?: () => void }) {
   const [hovered, setHovered] = useState(false);
@@ -50,7 +43,7 @@ function DownloadButton({ mobile = false }: { mobile?: boolean }) {
       whileTap={{ scale: 0.97 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => scrollToId('footer')}
+      onClick={() => scrollToId('contact')}
     >
       <i className="bi bi-apple text-base" />
       <ScrambleText text="Free Assessment" isHovered={hovered} />
