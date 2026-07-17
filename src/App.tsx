@@ -11,6 +11,7 @@ import Technology from './sections/Technology';
 import Architecture from './sections/Architecture';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import ChatBot from './chatbot/ChatBot';
 
 export default function App() {
   const [entranceComplete, setEntranceComplete] = useState(false);
@@ -32,6 +33,7 @@ export default function App() {
       <Architecture />
       <Contact />
       <Footer />
+      <ChatBot />
     </div>
   );
 }
