@@ -48,7 +48,7 @@ export default function Cinematic() {
             <br />
             We generate them.
           </h2>
-          <p className="mt-8 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed text-neon">
+          <p className="mt-8 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-bold text-neon-bright">
             Cinematic 30-second spots, product films, and brand stories — built
             with frontier video models and directed with a filmmaker's eye.
             Delivered in days, not months.

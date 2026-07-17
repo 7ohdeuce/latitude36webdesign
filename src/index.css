@@ -41,6 +41,15 @@ html {
     0 0 26px rgba(199, 125, 255, 0.3);
 }
 
+/* Brighter neon variant — for copy sitting on top of bright video */
+.text-neon-bright {
+  color: #fdf4ff;
+  text-shadow:
+    0 0 6px rgba(224, 170, 255, 0.9),
+    0 0 18px rgba(199, 125, 255, 0.75),
+    0 0 38px rgba(199, 125, 255, 0.5);
+}
+
 /* Lenis smooth scroll utility classes */
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;

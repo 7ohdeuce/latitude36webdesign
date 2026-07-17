@@ -14,17 +14,17 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer id="footer" className="relative bg-black overflow-hidden">
-      <div className="flex flex-col md:flex-row min-h-[400px]">
-        {/* Left: Video #5 — object-contain so the full frame stays in view */}
-        <div className="relative w-full md:w-1/2 min-h-[300px] md:min-h-[400px] flex items-center justify-center bg-black">
+      <div className="flex flex-col md:flex-row md:items-center min-h-[400px]">
+        {/* Left: Video #5 — full frame in view, hugging the text column */}
+        <div className="flex items-center justify-center md:justify-end w-full md:w-1/2 bg-black pt-10 md:py-10">
           <LazyVideo
             src={VIDEO_URL}
-            className="absolute inset-0 w-full h-full object-contain"
+            className="h-[300px] md:h-[380px] w-auto max-w-full object-contain rounded-3xl"
           />
         </div>
 
         {/* Right: content */}
-        <div className="flex flex-col justify-between w-full md:w-1/2 p-10 sm:p-16 gap-10">
+        <div className="flex flex-col justify-between w-full md:w-1/2 p-10 sm:p-12 md:pl-12 md:pr-16 gap-10">
           <div>
             <button
               className="flex items-center gap-3 mb-8"
@@ -42,8 +42,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex items-center justify-between gap-6 flex-wrap">
-            <p className="text-xs text-white/40">© 2026 Latitude36. All rights reserved.</p>
+          <div className="flex flex-col gap-4">
             <div className="flex items-center gap-5">
               {SOCIALS.map((social) => (
                 <a
@@ -56,6 +55,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+            <p className="text-xs text-white/40">© 2026 Latitude36. All rights reserved.</p>
           </div>
         </div>
       </div>
