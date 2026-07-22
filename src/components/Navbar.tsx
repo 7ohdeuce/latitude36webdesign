@@ -37,7 +37,7 @@ function Logo({ onClick, className = 'h-6' }: { onClick: () => void; className?:
       aria-label="Latitude36 home"
     >
       <img
-        src="/L36LOGO.png"
+        src="/L36LOGO2.png"
         alt="Latitude36"
         className={`${className} w-auto`}
         style={{ filter: 'drop-shadow(0 0 8px rgba(199,125,255,0.5))' }}

@@ -31,7 +31,7 @@ export default function Footer() {
               aria-label="Back to top"
             >
               <img
-                src="/L36LOGO.png"
+                src="/L36LOGO2.png"
                 alt="Latitude36"
                 className="h-8 w-auto"
                 style={{ filter: 'drop-shadow(0 0 10px rgba(199,125,255,0.5))' }}
