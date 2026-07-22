@@ -28,7 +28,7 @@ function goToSection(route: Route, id: string) {
   scrollToId(id);
 }
 
-function Logo({ onClick, className = 'text-[22px]' }: { onClick: () => void; className?: string }) {
+function Logo({ onClick, className = 'text-[34px]' }: { onClick: () => void; className?: string }) {
   return (
     <motion.button
       className="flex items-center h-12 pr-5 bg-transparent"
@@ -179,7 +179,7 @@ export default function Navbar({ entranceComplete, route }: NavbarProps) {
 
       {/* Mobile */}
       <div className="flex sm:hidden items-center justify-between h-full px-4">
-        <Logo onClick={goHome} className="text-[19px]" />
+        <Logo onClick={goHome} className="text-[27px]" />
 
         <button
           className="flex items-center justify-center w-11 h-11 bg-transparent"

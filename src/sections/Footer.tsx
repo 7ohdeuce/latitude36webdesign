@@ -31,7 +31,7 @@ export default function Footer() {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               aria-label="Back to top"
             >
-              <Wordmark className="text-[32px]" />
+              <Wordmark className="text-[46px] sm:text-[54px]" />
             </button>
 
             <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-md">
