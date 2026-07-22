@@ -23,3 +23,23 @@ export function scrollToId(id: string) {
     setTimeout(settle, 1200);
   }
 }
+
+/**
+ * Scroll to a section that may not be in the DOM yet — used when jumping
+ * from another page, where the target only exists after the landing page
+ * mounts. Polls briefly, then gives up rather than scrolling somewhere wrong.
+ */
+export function scrollToIdWhenReady(id: string, timeoutMs = 2000) {
+  const deadline = Date.now() + timeoutMs;
+
+  // Timer-based rather than requestAnimationFrame: rAF is paused in tabs the
+  // browser isn't painting, which would strand the jump.
+  const attempt = () => {
+    if (document.getElementById(id)) {
+      scrollToId(id);
+    } else if (Date.now() < deadline) {
+      setTimeout(attempt, 16);
+    }
+  };
+  attempt();
+}

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Latitude36Logo from './Latitude36Logo';
 import SquashHamburger from './SquashHamburger';
 import ScrambleText from './ScrambleText';
-import { scrollToId } from '../utils/scrollTo';
+import { scrollToId, scrollToIdWhenReady } from '../utils/scrollTo';
+import { navigate, type Route } from '../utils/router';
 
 interface NavbarProps {
   entranceComplete: boolean;
+  route: Route;
 }
 
 const NAV_LINKS: { label: string; target: string }[] = [
@@ -15,7 +16,47 @@ const NAV_LINKS: { label: string; target: string }[] = [
   { label: 'About Me', target: 'footer' },
 ];
 
-function NavLink({ label, target, onNavigate }: { label: string; target: string; onNavigate?: () => void }) {
+/** Jump to a landing-page section, returning home first if we're elsewhere. */
+function goToSection(route: Route, id: string) {
+  if (route !== 'home') {
+    navigate('home');
+    // The target section only exists once the landing page has mounted.
+    scrollToIdWhenReady(id);
+    return;
+  }
+  scrollToId(id);
+}
+
+function Logo({ onClick, className = 'h-6' }: { onClick: () => void; className?: string }) {
+  return (
+    <motion.button
+      className="flex items-center h-12 px-5 bg-white/15 backdrop-blur-md rounded-[14px]"
+      whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.22)' }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      aria-label="Latitude36 home"
+    >
+      <img
+        src="/L36LOGO.png"
+        alt="Latitude36"
+        className={`${className} w-auto`}
+        style={{ filter: 'drop-shadow(0 0 8px rgba(199,125,255,0.5))' }}
+      />
+    </motion.button>
+  );
+}
+
+function NavLink({
+  label,
+  target,
+  route,
+  onNavigate,
+}: {
+  label: string;
+  target: string;
+  route: Route;
+  onNavigate?: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
   return (
     <button
@@ -23,7 +64,7 @@ function NavLink({ label, target, onNavigate }: { label: string; target: string;
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => {
-        scrollToId(target);
+        goToSection(route, target);
         onNavigate?.();
       }}
     >
@@ -32,28 +73,64 @@ function NavLink({ label, target, onNavigate }: { label: string; target: string;
   );
 }
 
-function DownloadButton({ mobile = false }: { mobile?: boolean }) {
+function AppsButton({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
   const [hovered, setHovered] = useState(false);
   return (
     <motion.button
-      className={`flex items-center gap-2 bg-white text-black rounded-full font-medium ${
+      className={`flex items-center justify-center bg-white text-black rounded-full font-medium ${
         mobile ? 'h-11 px-5 text-[13px]' : 'h-12 px-6 text-sm'
       }`}
       whileHover={{ scale: 1.03, backgroundColor: '#e2e2e6' }}
       whileTap={{ scale: 0.97 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => scrollToId('contact')}
+      onClick={() => {
+        navigate('apps');
+        onNavigate?.();
+      }}
     >
-      <i className="bi bi-apple text-base" />
+      <ScrambleText text="Apps" isHovered={hovered} />
+    </motion.button>
+  );
+}
+
+function AssessmentButton({
+  route,
+  mobile = false,
+  onNavigate,
+}: {
+  route: Route;
+  mobile?: boolean;
+  onNavigate?: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.button
+      className={`flex items-center justify-center bg-white text-black rounded-full font-medium ${
+        mobile ? 'h-11 px-5 text-[13px]' : 'h-12 px-6 text-sm'
+      }`}
+      whileHover={{ scale: 1.03, backgroundColor: '#e2e2e6' }}
+      whileTap={{ scale: 0.97 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => {
+        goToSection(route, 'contact');
+        onNavigate?.();
+      }}
+    >
       <ScrambleText text="Free Assessment" isHovered={hovered} />
     </motion.button>
   );
 }
 
-export default function Navbar({ entranceComplete }: NavbarProps) {
+export default function Navbar({ entranceComplete, route }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const goHome = () => {
+    if (route !== 'home') navigate('home');
+    else scrollToId('top');
+  };
 
   return (
     <motion.nav
@@ -65,16 +142,7 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
       {/* Desktop */}
       <div className="hidden sm:flex items-center justify-between h-full px-4 md:px-8">
         <div className="flex items-center gap-2">
-          {/* Logo pill */}
-          <motion.button
-            className="flex items-center gap-2.5 h-12 px-5 bg-white/15 backdrop-blur-md rounded-[14px]"
-            whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.22)' }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => scrollToId('top')}
-          >
-            <Latitude36Logo size={22} className="text-white" />
-            <span className="text-[16px] font-medium tracking-tight text-white">Latitude36</span>
-          </motion.button>
+          <Logo onClick={goHome} />
 
           {/* Expanding menu pill */}
           <motion.div
@@ -99,7 +167,7 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
                   transition={{ duration: 0.2, delay: 0.1 }}
                 >
                   {NAV_LINKS.map((link) => (
-                    <NavLink key={link.label} {...link} />
+                    <NavLink key={link.label} {...link} route={route} />
                   ))}
                 </motion.div>
               )}
@@ -107,19 +175,15 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
           </motion.div>
         </div>
 
-        <DownloadButton />
+        <div className="flex items-center gap-2">
+          <AppsButton />
+          <AssessmentButton route={route} />
+        </div>
       </div>
 
       {/* Mobile */}
       <div className="flex sm:hidden items-center justify-between h-full px-4">
-        <motion.button
-          className="flex items-center gap-2 h-11 px-4 bg-white/15 backdrop-blur-md rounded-[14px]"
-          whileTap={{ scale: 0.98 }}
-          onClick={() => scrollToId('top')}
-        >
-          <Latitude36Logo size={20} className="text-white" />
-          <span className="text-[15px] font-medium tracking-tight text-white">Latitude36</span>
-        </motion.button>
+        <Logo onClick={goHome} className="h-5" />
 
         <button
           className="flex items-center justify-center w-11 h-11 bg-white/15 backdrop-blur-md rounded-[14px]"
@@ -140,9 +204,15 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
             transition={{ duration: 0.25 }}
           >
             {NAV_LINKS.map((link) => (
-              <NavLink key={link.label} {...link} onNavigate={() => setMobileOpen(false)} />
+              <NavLink
+                key={link.label}
+                {...link}
+                route={route}
+                onNavigate={() => setMobileOpen(false)}
+              />
             ))}
-            <DownloadButton mobile />
+            <AppsButton mobile onNavigate={() => setMobileOpen(false)} />
+            <AssessmentButton route={route} mobile onNavigate={() => setMobileOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>

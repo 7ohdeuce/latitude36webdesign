@@ -6,8 +6,12 @@ import { optimizedVideoUrl } from '../utils/videoUrl';
 const HERO_VIDEO =
   'https://res.cloudinary.com/wnb3twu1/video/upload/v1784196255/axolotl_wyn5xn.mp4';
 
+// How much of the clip one full sweep across the viewport covers.
 const SCRUB_SENSITIVITY = 0.8;
-const SMOOTHING = 0.12;
+// Fraction of the remaining distance closed per frame — lower is smoother.
+const SMOOTHING = 0.1;
+// Don't ask for a new seek until the playhead is at least this far off.
+const SEEK_EPSILON = 0.02;
 
 interface HeroProps {
   entranceComplete: boolean;
@@ -33,7 +37,7 @@ export default function Hero({ entranceComplete }: HeroProps) {
 
     const applyDelta = (dx: number) => {
       const duration = video.duration;
-      if (!duration || isNaN(duration)) return;
+      if (!duration || !isFinite(duration)) return;
       const delta = (dx / window.innerWidth) * duration * SCRUB_SENSITIVITY;
       target = Math.min(Math.max(target + delta, 0), duration - 0.05);
     };
@@ -41,6 +45,9 @@ export default function Hero({ entranceComplete }: HeroProps) {
     const onMouseMove = (e: MouseEvent) => {
       if (lastMouseX !== null) applyDelta(e.clientX - lastMouseX);
       lastMouseX = e.clientX;
+    };
+    const onMouseLeave = () => {
+      lastMouseX = null;
     };
 
     const onTouchStart = (e: TouchEvent) => {
@@ -59,25 +66,25 @@ export default function Hero({ entranceComplete }: HeroProps) {
       seeking = false;
     };
 
-    // Smoothing loop: ease the playhead toward the drag target every frame,
-    // and only issue a new seek once the previous one has landed (seeked
-    // event) so frames are never dropped.
+    // Ease the playhead toward the drag target once per frame, and never
+    // stack seek requests — a new one is only issued after the previous
+    // seek reports back, which is what keeps the decoder from thrashing.
     const tick = () => {
+      raf = requestAnimationFrame(tick);
+      if (video.readyState < 2) return;
+
       smoothed += (target - smoothed) * SMOOTHING;
-      if (
-        !seeking &&
-        video.readyState >= 2 &&
-        Math.abs(video.currentTime - smoothed) > 0.005
-      ) {
+      if (!seeking && Math.abs(video.currentTime - smoothed) > SEEK_EPSILON) {
         seeking = true;
         video.currentTime = smoothed;
       }
-      raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
 
     video.addEventListener('seeked', onSeeked);
-    window.addEventListener('mousemove', onMouseMove);
+    video.addEventListener('error', onSeeked);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    document.addEventListener('mouseleave', onMouseLeave);
     section.addEventListener('touchstart', onTouchStart, { passive: true });
     section.addEventListener('touchmove', onTouchMove, { passive: true });
     section.addEventListener('touchend', onTouchEnd);
@@ -85,7 +92,9 @@ export default function Hero({ entranceComplete }: HeroProps) {
     return () => {
       cancelAnimationFrame(raf);
       video.removeEventListener('seeked', onSeeked);
+      video.removeEventListener('error', onSeeked);
       window.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseleave', onMouseLeave);
       section.removeEventListener('touchstart', onTouchStart);
       section.removeEventListener('touchmove', onTouchMove);
       section.removeEventListener('touchend', onTouchEnd);
@@ -102,7 +111,7 @@ export default function Hero({ entranceComplete }: HeroProps) {
       {/* Video #1 — scrubbed by mouse movement / touch drag, not autoplay */}
       <video
         ref={videoRef}
-        src={optimizedVideoUrl(HERO_VIDEO)}
+        src={optimizedVideoUrl(HERO_VIDEO, true)}
         className="absolute inset-0 w-full h-full object-cover"
         muted
         playsInline

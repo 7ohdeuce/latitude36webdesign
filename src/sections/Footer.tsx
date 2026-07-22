@@ -1,4 +1,3 @@
-import Latitude36Logo from '../components/Latitude36Logo';
 import LazyVideo from '../components/LazyVideo';
 
 const VIDEO_URL =
@@ -27,11 +26,16 @@ export default function Footer() {
         <div className="flex flex-col justify-between w-full md:w-1/2 p-10 sm:p-12 md:pl-12 md:pr-16 gap-10">
           <div>
             <button
-              className="flex items-center gap-3 mb-8"
+              className="flex items-center mb-8"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Back to top"
             >
-              <Latitude36Logo size={28} className="text-white" />
-              <span className="text-xl font-bold tracking-tight">Latitude36</span>
+              <img
+                src="/L36LOGO.png"
+                alt="Latitude36"
+                className="h-8 w-auto"
+                style={{ filter: 'drop-shadow(0 0 10px rgba(199,125,255,0.5))' }}
+              />
             </button>
 
             <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-md">

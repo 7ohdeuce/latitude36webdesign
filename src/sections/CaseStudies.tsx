@@ -4,9 +4,6 @@ import { Play, ArrowUpRight } from 'lucide-react';
 import ScrambleText from '../components/ScrambleText';
 import LazyVideo from '../components/LazyVideo';
 
-const SECTION_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_095810_ecea3dd2-fc5e-4e41-8696-4219290b6589.mp4';
-
 interface CaseStudy {
   index: string;
   title: string;
@@ -108,7 +105,7 @@ function CaseStudyCard({ study, delay }: { study: CaseStudy; delay: number }) {
 
   return (
     <motion.article
-      className="group relative border border-white/15 rounded-2xl overflow-hidden bg-black/60 backdrop-blur-sm"
+      className="group relative border border-white/15 rounded-2xl overflow-hidden bg-white/[0.03]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
@@ -185,13 +182,16 @@ function CaseStudySection({
   const [viewMoreHovered, setViewMoreHovered] = useState(false);
 
   return (
-    <section id={id} className="relative min-h-screen overflow-hidden">
-      {/* Video #3 (shared across the case study sections for now) */}
-      <LazyVideo
-        src={SECTION_VIDEO}
-        className="absolute inset-0 w-full h-full object-cover"
+    <section id={id} className="relative bg-black overflow-hidden">
+      {/* Dot grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+          opacity: 0.04,
+        }}
       />
-      <div className="absolute inset-0 bg-black/70" />
 
       <div className="relative z-10 px-4 sm:px-6 md:px-8 py-24 sm:py-32 max-w-7xl mx-auto">
         <motion.div

@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
-import Hero from './sections/Hero';
-import Cinematic from './sections/Cinematic';
-import {
-  CommercialCaseStudies,
-  WebsiteCaseStudies,
-  ToolCaseStudies,
-} from './sections/CaseStudies';
-import Technology from './sections/Technology';
-import Architecture from './sections/Architecture';
-import Contact from './sections/Contact';
-import Footer from './sections/Footer';
+import Landing from './pages/Landing';
+import Apps from './pages/Apps';
 import ChatBot from './chatbot/ChatBot';
+import { useRoute } from './utils/router';
 
 export default function App() {
   const [entranceComplete, setEntranceComplete] = useState(false);
+  const route = useRoute();
 
   useEffect(() => {
     const timer = setTimeout(() => setEntranceComplete(true), 800);
@@ -23,16 +16,8 @@ export default function App() {
 
   return (
     <div className="bg-black text-white" style={{ fontFamily: '"Space Mono", monospace' }}>
-      <Navbar entranceComplete={entranceComplete} />
-      <Hero entranceComplete={entranceComplete} />
-      <Cinematic />
-      <CommercialCaseStudies />
-      <WebsiteCaseStudies />
-      <ToolCaseStudies />
-      <Technology />
-      <Architecture />
-      <Contact />
-      <Footer />
+      <Navbar entranceComplete={entranceComplete} route={route} />
+      {route === 'apps' ? <Apps /> : <Landing entranceComplete={entranceComplete} />}
       <ChatBot />
     </div>
   );
