@@ -116,6 +116,9 @@ export default function Hero({ entranceComplete }: HeroProps) {
         muted
         playsInline
         preload="auto"
+        onContextMenu={(e) => e.preventDefault()}
+        controlsList="nodownload"
+        disablePictureInPicture
       />
 
       {/* Dot grid overlay */}
@@ -127,28 +130,6 @@ export default function Hero({ entranceComplete }: HeroProps) {
           opacity: 0.05,
         }}
       />
-
-      {/* Background watermark */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-        style={{ transform: 'translateY(50px)' }}
-      >
-        <span
-          className="uppercase leading-none"
-          style={{
-            // follows --wordmark-font, so swapping the logo font swaps this too
-            fontFamily: "var(--wordmark-font, 'Titan One'), sans-serif",
-            // Titan One is ~1.45x wider than the Anton SC this replaced, so the
-            // clamp is scaled down to keep the watermark's original footprint.
-            fontSize: 'clamp(83px, 20.6vw, 359px)',
-            letterSpacing: '-4px',
-            opacity: 0.1,
-            color: '#ffffff',
-          }}
-        >
-          LATITUDE36
-        </span>
-      </div>
 
       {/* Content */}
       <motion.div

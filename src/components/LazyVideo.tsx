@@ -44,6 +44,9 @@ export default function LazyVideo({ src, className }: LazyVideoProps) {
       loop
       playsInline
       preload="metadata"
+      onContextMenu={(e) => e.preventDefault()}
+      controlsList="nodownload"
+      disablePictureInPicture
     />
   );
 }
