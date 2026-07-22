@@ -136,15 +136,14 @@ export default function Hero({ entranceComplete }: HeroProps) {
         <span
           className="uppercase leading-none"
           style={{
-            fontFamily: '"Anton SC", sans-serif',
-            fontSize: 'clamp(120px, 30vw, 521px)',
+            // follows --wordmark-font, so swapping the logo font swaps this too
+            fontFamily: "var(--wordmark-font, 'Titan One'), sans-serif",
+            // Titan One is ~1.45x wider than the Anton SC this replaced, so the
+            // clamp is scaled down to keep the watermark's original footprint.
+            fontSize: 'clamp(83px, 20.6vw, 359px)',
             letterSpacing: '-4px',
             opacity: 0.1,
-            background: 'radial-gradient(circle, rgba(142,127,148,0) 0%, #8E7F94 70%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            color: 'transparent',
+            color: '#ffffff',
           }}
         >
           LATITUDE36
