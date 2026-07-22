@@ -162,8 +162,13 @@ export default function Hero({ entranceComplete }: HeroProps) {
 
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-4 max-w-xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              Latitude36
+            <h1>
+              <img
+                src="/L36LOGO2.png"
+                alt="Latitude36"
+                className="h-10 sm:h-12 md:h-16 w-auto"
+                style={{ filter: 'drop-shadow(0 0 14px rgba(199,125,255,0.55))' }}
+              />
             </h1>
             <motion.p
               className="text-sm sm:text-base leading-relaxed text-neon"
@@ -171,9 +176,8 @@ export default function Hero({ entranceComplete }: HeroProps) {
               animate={entranceComplete ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.9, ease: [0.215, 0.61, 0.355, 1.0], delay: 0.2 }}
             >
-              An AI agency crafting cinematic commercials with generative video.
-              We turn your brand story into film-grade advertising — no crews,
-              no sets, no six-figure production budgets.
+              We serve as the bridge between AI automation and traditional
+              workflows.
             </motion.p>
           </div>
 
