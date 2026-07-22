@@ -30,8 +30,8 @@ function goToSection(route: Route, id: string) {
 function Logo({ onClick, className = 'h-6' }: { onClick: () => void; className?: string }) {
   return (
     <motion.button
-      className="flex items-center h-12 px-5 bg-white/15 backdrop-blur-md rounded-[14px]"
-      whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.22)' }}
+      className="flex items-center h-12 pr-5 bg-transparent"
+      whileHover={{ scale: 1.04 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       aria-label="Latitude36 home"
@@ -146,7 +146,7 @@ export default function Navbar({ entranceComplete, route }: NavbarProps) {
 
           {/* Expanding menu pill */}
           <motion.div
-            className="flex items-center h-12 bg-white/15 backdrop-blur-md rounded-[14px] overflow-hidden"
+            className="flex items-center h-12 bg-transparent overflow-hidden"
             animate={{ width: menuOpen ? 290 : 48 }}
             transition={{ type: 'spring', stiffness: 350, damping: 28 }}
           >
@@ -186,7 +186,7 @@ export default function Navbar({ entranceComplete, route }: NavbarProps) {
         <Logo onClick={goHome} className="h-5" />
 
         <button
-          className="flex items-center justify-center w-11 h-11 bg-white/15 backdrop-blur-md rounded-[14px]"
+          className="flex items-center justify-center w-11 h-11 bg-transparent"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
         >
