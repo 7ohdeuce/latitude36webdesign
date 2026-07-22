@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SquashHamburger from './SquashHamburger';
+import Wordmark from './Wordmark';
 import ScrambleText from './ScrambleText';
 import { scrollToId, scrollToIdWhenReady } from '../utils/scrollTo';
 import { navigate, type Route } from '../utils/router';
@@ -27,7 +28,7 @@ function goToSection(route: Route, id: string) {
   scrollToId(id);
 }
 
-function Logo({ onClick, className = 'h-6' }: { onClick: () => void; className?: string }) {
+function Logo({ onClick, className = 'text-[22px]' }: { onClick: () => void; className?: string }) {
   return (
     <motion.button
       className="flex items-center h-12 pr-5 bg-transparent"
@@ -36,12 +37,7 @@ function Logo({ onClick, className = 'h-6' }: { onClick: () => void; className?:
       onClick={onClick}
       aria-label="Latitude36 home"
     >
-      <img
-        src="/L36LOGO2.png"
-        alt="Latitude36"
-        className={`${className} w-auto`}
-        style={{ filter: 'drop-shadow(0 0 8px rgba(199,125,255,0.5))' }}
-      />
+      <Wordmark className={className} />
     </motion.button>
   );
 }
@@ -183,7 +179,7 @@ export default function Navbar({ entranceComplete, route }: NavbarProps) {
 
       {/* Mobile */}
       <div className="flex sm:hidden items-center justify-between h-full px-4">
-        <Logo onClick={goHome} className="h-5" />
+        <Logo onClick={goHome} className="text-[19px]" />
 
         <button
           className="flex items-center justify-center w-11 h-11 bg-transparent"

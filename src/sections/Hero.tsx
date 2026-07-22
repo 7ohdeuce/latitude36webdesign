@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { optimizedVideoUrl } from '../utils/videoUrl';
+import Wordmark from '../components/Wordmark';
 
 const HERO_VIDEO =
   'https://res.cloudinary.com/wnb3twu1/video/upload/v1784196255/axolotl_wyn5xn.mp4';
@@ -161,13 +162,8 @@ export default function Hero({ entranceComplete }: HeroProps) {
 
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-4 max-w-xl">
-            <h1>
-              <img
-                src="/L36LOGO2.png"
-                alt="Latitude36"
-                className="h-10 sm:h-12 md:h-16 w-auto"
-                style={{ filter: 'drop-shadow(0 0 14px rgba(199,125,255,0.55))' }}
-              />
+            <h1 aria-label="Latitude36">
+              <Wordmark className="text-[40px] sm:text-[52px] md:text-[68px]" />
             </h1>
             <motion.p
               className="text-sm sm:text-base leading-relaxed text-neon"

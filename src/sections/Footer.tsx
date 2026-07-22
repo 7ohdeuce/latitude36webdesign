@@ -1,4 +1,5 @@
 import LazyVideo from '../components/LazyVideo';
+import Wordmark from '../components/Wordmark';
 
 const VIDEO_URL =
   'https://res.cloudinary.com/wnb3twu1/video/upload/v1784198126/headshot_lixtrh.mp4';
@@ -30,12 +31,7 @@ export default function Footer() {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               aria-label="Back to top"
             >
-              <img
-                src="/L36LOGO2.png"
-                alt="Latitude36"
-                className="h-8 w-auto"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(199,125,255,0.5))' }}
-              />
+              <Wordmark className="text-[32px]" />
             </button>
 
             <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-md">
