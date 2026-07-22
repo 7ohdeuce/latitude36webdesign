@@ -1,5 +1,8 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Clapperboard, Wand2, Gauge } from 'lucide-react';
+import ScrambleIn from '../components/ScrambleIn';
+import { useInViewport } from '../utils/useInViewport';
 
 const FEATURES = [
   {
@@ -25,6 +28,10 @@ const FEATURES = [
 ];
 
 export default function Cinematic() {
+  // The scramble reveal only runs once the headline block is on screen.
+  const scrambleRef = useRef<HTMLDivElement>(null);
+  const scrambleInView = useInViewport(scrambleRef);
+
   return (
     <section id="cinematic" className="relative bg-black overflow-hidden">
       {/* Dot grid overlay */}
@@ -59,6 +66,18 @@ export default function Cinematic() {
             with frontier video models and directed with a filmmaker's eye.
             Delivered in days, not months.
           </p>
+
+          <div
+            ref={scrambleRef}
+            className="mt-12 sm:mt-16 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+          >
+            <span className="block">
+              <ScrambleIn text="Every Frame." delay={200} triggered={scrambleInView} />
+            </span>
+            <span className="block">
+              <ScrambleIn text="Generated." delay={500} triggered={scrambleInView} />
+            </span>
+          </div>
         </motion.div>
 
         {/* Adaptive Intelligence — merged in below the headline */}

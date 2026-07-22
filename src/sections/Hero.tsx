@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import ScrambleIn from '../components/ScrambleIn';
 import { optimizedVideoUrl } from '../utils/videoUrl';
 
 const HERO_VIDEO =
@@ -180,15 +179,6 @@ export default function Hero({ entranceComplete }: HeroProps) {
               workflows.
             </motion.p>
           </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-right md:text-right">
-            <span className="block">
-              <ScrambleIn text="Every Frame." delay={700} triggered={entranceComplete} />
-            </span>
-            <span className="block">
-              <ScrambleIn text="Generated." delay={1000} triggered={entranceComplete} />
-            </span>
-          </h1>
         </div>
       </motion.div>
     </section>
